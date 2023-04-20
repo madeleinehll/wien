@@ -64,8 +64,12 @@ async function showSights(url) {
     let jsondata = await response.json (); 
     L.geoJSON(jsondata, {
         onEachFeature: function(feature,layer){
-            let prop = feature.properties; //Variable damit kürzer
-            layer.bindPopup(prop.NAME);
+            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+            layer.bindPopup(`
+            <img src = "${prop.THUMBNAIL}" alt="*" > 
+            <h4><a href="${prop.WEITERE_INF}" target="Wien">${prop.NAME}</a></h4>
+            <address>${prop.ADRESSE}</adress>
+            `);
             console.log(prop.NAME);
         }
     }).addTo(themaLayer.sights); 
