@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&family=Roboto:wght@300&display=swap');
 
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Open Sans", sans-serif; /*wenn kein Open Sans dann sans-serif*/
 }
 
 a {
@@ -11,20 +11,20 @@ a {
 }
 
 main {
-    max-width: 1200px;
+    max-width: 1200px; /*Seitenbreite maximal*/
     margin: auto;
 }
 
 header {
-    display: grid;
+    display: grid;/*Bus*/
     grid-template-columns: 80% 20%;
 }
 
 header h2 {
-    margin: 0;
+    margin: 0; /* Abstand zur Map*/
 }
 
-header nav {
+header nav { /*alles was mit Github auf der rechten Seite zu tun hat*/
     text-align: right;
     font-size: 0.9em;
     font-weight: bold;
@@ -32,12 +32,12 @@ header nav {
 }
 
 article {
-    margin-top: 0.5em;
+    margin-top: 0.5em; /*Abstand Github*/
 }
 
 #map {
     width: 100%;
-    height: 85vh;
+    height: 85vh; /*85 Prozent von der visuellen Höhe, in Abhängigkeit zum Browserfenster*/
     border: 1px solid gray;
 }
 
@@ -48,5 +48,5 @@ footer {
 }
 
 footer nav {
-    display: inline-block;
+    display: inline-block; /*Nebeneinander darstellen der links anstatt untereinander*/
 }
