@@ -34,4 +34,14 @@ L.control.scale({
 }).addTo(map);
 
 //Vienna Sightseeing Haltestellen
-//https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json
+//asynchrone Funktion, damit schneller geladen werden kann
+async function showStops(url) {
+    let response = await fetch(url); //Anfrage, Antwort kommt zurück
+    let jsondata = await response.json (); //json Daten aus Response entnehmen 
+    L.geoJSON(jsondata).addTo(map); //alle Busstopps anzeigen als Marker
+    console.log(response);
+}
+showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json"); //aufrufen der Funktion 
+
+
+
