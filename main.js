@@ -62,7 +62,13 @@ showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showSights(url) {
     let response = await fetch(url); 
     let jsondata = await response.json (); 
-    L.geoJSON(jsondata).addTo(themaLayer.sights); 
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature,layer){
+            let prop = feature.properties; //Variable damit kürzer
+            layer.bindPopup(prop.NAME);
+            console.log(prop.NAME);
+        }
+    }).addTo(themaLayer.sights); 
     //console.log(response);
 }
 showSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
