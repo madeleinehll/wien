@@ -55,7 +55,7 @@ async function showStops(url) {
         onEachFeature: function(feature,layer){
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
-            <h4><i class="fa-solid fa-bus"></i> <a> ${prop.LINE_NAME}</a></h4>
+            <h4><i class="fa-solid fa-bus"></i>  ${prop.LINE_NAME}</h4>
             <stops>${prop.STAT_NAME}</stops>
             `);
             console.log(prop.NAME);
@@ -72,10 +72,10 @@ async function showLines(url) {
         onEachFeature: function(feature,layer){
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
-            <h4><i class="fa-solid fa-bus"></i> <a> ${prop.LINE_NAME}</a></h4>
-            <start> <i class= "fa-regular fa-circle-stop"></i> <a>${prop.FROM_NAME}</a></start> </br>
+            <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
+            <start> <i class= "fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}</start> </br>
             <i class= "fa-solid fa-down-long"></i> </br>
-            <end> <i class= "fa-regular fa-circle-stop"></i> <a>${prop.TO_NAME}</a></end>
+            <end> <i class= "fa-regular fa-circle-stop"></i>${prop.TO_NAME}</end>
             `);
             console.log(prop.NAME);
         }
@@ -105,7 +105,17 @@ showSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&ver
 async function showZones(url) {
     let response = await fetch(url); 
     let jsondata = await response.json (); 
-    L.geoJSON(jsondata).addTo(themaLayer.zones); 
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature,layer){
+            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+            layer.bindPopup(`
+            <h4>Fußgängerzone ${prop.ADRESSE}</h4>
+            <open> <i class= "fa-regular fa-clock"></i> ${prop.ZEITRAUM}</open> </br>
+            <info> <i class= "fa-sharp fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT}</info>
+            `);
+            console.log(prop.NAME);
+        }
+    }).addTo(themaLayer.zones); 
     //console.log(response);
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
