@@ -51,7 +51,16 @@ L.control.scale({
 async function showStops(url) {
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json (); //json Daten aus Response entnehmen 
-    L.geoJSON(jsondata).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature,layer){
+            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+            layer.bindPopup(`
+            <h4><i class="fa-solid fa-bus"></i> <a> ${prop.LINE_NAME}</a></h4>
+            <stops>${prop.STAT_NAME}</stops>
+            `);
+            console.log(prop.NAME);
+        }
+    }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
     //console.log(response);
 }
 showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json"); //aufrufen der Funktion 
@@ -59,7 +68,18 @@ showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showLines(url) {
     let response = await fetch(url); 
     let jsondata = await response.json ();
-    L.geoJSON(jsondata).addTo(themaLayer.lines); 
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature,layer){
+            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+            layer.bindPopup(`
+            <h4><i class="fa-solid fa-bus"></i> <a> ${prop.LINE_NAME}</a></h4>
+            <start> <i class= "fa-regular fa-circle-stop"></i> <a>${prop.FROM_NAME}</a></start> </br>
+            <i class= "fa-solid fa-down-long"></i> </br>
+            <end> <i class= "fa-regular fa-circle-stop"></i> <a>${prop.TO_NAME}</a></end>
+            `);
+            console.log(prop.NAME);
+        }
+    } ).addTo(themaLayer.lines); 
     //console.log(response);
 }
 showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
