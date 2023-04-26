@@ -74,7 +74,7 @@ async function showLines(url) {
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
-            <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4> </br> </br>
+            <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
             <start> <i class= "fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}</start> </br>
             <i class= "fa-solid fa-down-long"></i> </br>
             <end> <i class= "fa-regular fa-circle-stop"></i>${prop.TO_NAME}</end>
