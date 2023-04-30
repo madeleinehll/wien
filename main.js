@@ -20,10 +20,11 @@ map.addControl(new L.Control.Fullscreen({
 }))
 //thematische Layer 
 let themaLayer = {
-    stops: L.featureGroup(),
-    lines: L.featureGroup(),
-    zones: L.featureGroup(),
+    stops: L.featureGroup().addTo(map),
+    lines: L.featureGroup().addTo(map),
+    zones: L.featureGroup().addTo(map),
     sights: L.featureGroup().addTo(map),
+    hotels: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
