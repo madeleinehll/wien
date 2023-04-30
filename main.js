@@ -52,16 +52,16 @@ async function showStops(url) {
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json(); //json Daten aus Response entnehmen 
     L.geoJSON(jsondata, {
-    pointToLayer: function (feature,latlng) {
-        //console.log(feature.properties)
-        return L.marker (latlng, {
-            icon: L.icon ({
-                iconUrl: `icon/bus_${feature.properties.LINE_ID}.png`,
-                iconAnchor: [16, 37],
-                popupAnchor: [0, -37],
-            })
-        });
-    }, 
+        pointToLayer: function (feature, latlng) {
+            //console.log(feature.properties)
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: `icon/bus_${feature.properties.LINE_ID}.png`,
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                })
+            });
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
@@ -79,23 +79,23 @@ async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     let lineNames = {},
-    let lineColors = { //https://clrs.cc/
-        "1": "#FF4136", //Red Line
-        "2": "#FFDC00", //Yellow Line
-        "3": "#0074D9", //Blue Line
-        "4": "#2ECC40", //Green Line
-        "5": "#AAAAAA", //Grey Line 
-        "6": "#FF851B", //Orange Line
-    }
+        let lineColors = { //https://clrs.cc/
+            "1": "#FF4136", //Red Line
+            "2": "#FFDC00", //Yellow Line
+            "3": "#0074D9", //Blue Line
+            "4": "#2ECC40", //Green Line
+            "5": "#AAAAAA", //Grey Line 
+            "6": "#FF851B", //Orange Line
+        }
 
     //console.log(response,jsondata);
     L.geoJSON(jsondata, {
         style: function (feature) {
-        return {
-            color:lineColors[feature.properties.LINE_ID],
-            weight: 3,
-            dashArray: [10, 4]
-        };
+            return {
+                color: lineColors[feature.properties.LINE_ID],
+                weight: 3,
+                dashArray: [10, 4]
+            };
         },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
@@ -109,8 +109,8 @@ async function showLines(url) {
             <br>
             </p>
             `);
-            lineNames[prop.LINE_ID]= prop.LINE_NAME;
-           // console.log(lineNames)
+            lineNames[prop.LINE_ID] = prop.LINE_NAME;
+            // console.log(lineNames)
         }
     }).addTo(themaLayer.lines);
     //console.log(response);
@@ -123,7 +123,7 @@ async function showSights(url) {
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
         pointToLayer: function (feature, latlng) {
-            return L.marker (latlng,{
+            return L.marker(latlng, {
                 icon: L.icon({
                     iconUrl: "icons/photo.png",
                     iconAnchor: [16, 37],
@@ -151,18 +151,18 @@ async function showZones(url) {
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
         style: function (feature) {
-        return {
-            color: "#F012BE",
-            weight: 1,
-            fillOpacity: 0.1,
-            opacity: 0.4
-        };
-    },
+            return {
+                color: "#F012BE",
+                weight: 1,
+                fillOpacity: 0.1,
+                opacity: 0.4
+            };
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
             <h4>Fußgängerzone ${prop.ADRESSE}</h4>
-            <open> <p><i class= "fa-regular fa-clock"></i> ${prop.ZEITRAUM || "dauerhaft" }</open> </p>
+            <open> <p><i class= "fa-regular fa-clock"></i> ${prop.ZEITRAUM || "dauerhaft"}</open> </p>
             <p><info> <i class= "fa-sharp fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT || "keine Ausnahmen"}</info> </p>
             `);
             //console.log(prop.NAME);
@@ -178,7 +178,7 @@ async function showHotels(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        pointToLayer: function(feature, latlng) {
+        pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
                     iconUrl: "icons/hotel_0star.png",
@@ -187,7 +187,7 @@ async function showHotels(url) {
                 })
             });
         },
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
                 <h3>${prop.BETRIEB}</h3>
