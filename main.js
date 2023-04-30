@@ -174,3 +174,34 @@ async function showZones(url) {
     //console.log(response);
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
+
+// Hotels
+async function showHotels(url) {
+    let response = await fetch(url);
+    let jsondata = await response.json();
+    //console.log(response, jsondata);
+    L.geoJSON(jsondata, {
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/hotel_0star.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                })
+            });
+        },
+        onEachFeature: function(feature, layer) {
+            let prop = feature.properties;
+            layer.bindPopup(`
+                <h3>${prop.BETRIEB}</h3>
+                <h4>${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}</h4>
+                <hr>
+                Addr.: ${prop.ADRESSE}<br>
+                Tel.: <a href="tel:${prop.KONTAKT_TEL}">${prop.KONTAKT_TEL}</a><br>
+                <a href="mailto:${prop.KONTAKT_EMAIL}">${prop.KONTAKT_EMAIL}</a><br>
+                <a href="${prop.WEBLINK1}">Homepage</a><br>
+            `);
+        }
+    }).addTo(themaLayer.hotels);
+}
+showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
