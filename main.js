@@ -50,6 +50,7 @@ L.control.scale({
 
 //Vienna Sightseeing Haltestellen
 //asynchrone Funktion, damit schneller geladen werden kann
+//STOPS
 async function showStops(url) {
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json(); //json Daten aus Response entnehmen 
@@ -76,6 +77,7 @@ async function showStops(url) {
 }
 showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json"); //aufrufen der Funktion 
 
+//LINES
 async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
@@ -91,25 +93,47 @@ async function showLines(url) {
 
     //console.log(response,jsondata);
     L.geoJSON(jsondata, {
+        style: function (feature) {
+        return {
+            color:lineColors[feature.properties.LINE_ID],
+            weight: 3,
+            dashArray: [10, 4]
+        };
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
             <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
+            <p>
             <start> <i class= "fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}</start> </br>
-            <i class= "fa-solid fa-down-long"></i> </br>
+            <i class= "fa-solid fa-down-long"></i> 
+            </br>
             <end> <i class= "fa-regular fa-circle-stop"></i>${prop.TO_NAME}</end>
+            <br>
+            </p>
             `);
-            console.log(prop.NAME);
+            lineNames[prop.LINE_ID]= prop.LINE_NAME;
+           // console.log(lineNames)
         }
     }).addTo(themaLayer.lines);
     //console.log(response);
 }
 showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
+//Sehenswürdigkeiten
 async function showSights(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker (latlng,{
+                icon: L.icon({
+                    iconUrl: "icons/photo.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                })
+            });
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
@@ -117,25 +141,34 @@ async function showSights(url) {
             <h4><a href="${prop.WEITERE_INF}" target="Wien">${prop.NAME}</a></h4>
             <address>${prop.ADRESSE}</adress>
             `);
-            console.log(prop.NAME);
+            //console.log(feature.properties,prop.NAME);
         }
     }).addTo(themaLayer.sights);
     //console.log(response);
 }
 showSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
 
+//Fußgängerzonen
 async function showZones(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
+        style: function (feature) {
+        return {
+            color: "#F012BE",
+            weight: 1,
+            fillOpacity: 0.1,
+            opacity: 0.4
+        };
+    },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
             <h4>Fußgängerzone ${prop.ADRESSE}</h4>
-            <open> <i class= "fa-regular fa-clock"></i> ${prop.ZEITRAUM}</open> </br>
-            <info> <i class= "fa-sharp fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT}</info>
+            <open> <p><i class= "fa-regular fa-clock"></i> ${prop.ZEITRAUM || "dauerhaft" }</open> </p>
+            <p><info> <i class= "fa-sharp fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT || "keine Ausnahmen"}</info> </p>
             `);
-            console.log(prop.NAME);
+            //console.log(prop.NAME);
         }
     }).addTo(themaLayer.zones);
     //console.log(response);
