@@ -40,6 +40,7 @@ let layerControl = L.control.layers({
     "Vienna Sightseeing Linien": themaLayer.lines,
     "Fußgängerzonen": themaLayer.zones,
     "Sehenswürdigkeiten": themaLayer.sights,
+    "Hotels und Unterkünfte": themaLayer.hotels
 }).addTo(map);
 
 // Maßstab
@@ -53,14 +54,22 @@ async function showStops(url) {
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json(); //json Daten aus Response entnehmen 
     L.geoJSON(jsondata, {
+    pointToLayer: function (feature,latlng) {
+        //console.log(feature.properties)
+        return L.marker (latlng, {
+            icon: L.icon ({
+                iconUrl: `icon/bus_${feature.properties.LINE_ID}.png`,
+                iconAnchor: [16, 37],
+                popupAnchor: [0, -37],
+            })
+        });
+    }, 
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
             <h4><i class="fa-solid fa-bus"></i>  ${prop.LINE_NAME}</h4>
-            <station>${prop.STAT_ID}</station>
-            <stops>${prop.STAT_NAME}</stops>
+            <p> ${prop.STAT_ID} ${prop.STAT_NAME} </p>
             `);
-            console.log(prop.NAME);
         }
     }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
     //console.log(response);
@@ -70,6 +79,17 @@ showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
+    let lineNames = {},
+    let lineColors = { //https://clrs.cc/
+        "1": "#FF4136", //Red Line
+        "2": "#FFDC00", //Yellow Line
+        "3": "#0074D9", //Blue Line
+        "4": "#2ECC40", //Green Line
+        "5": "#AAAAAA", //Grey Line 
+        "6": "#FF851B", //Orange Line
+    }
+
+    //console.log(response,jsondata);
     L.geoJSON(jsondata, {
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
