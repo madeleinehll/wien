@@ -47,48 +47,48 @@ L.control.scale({
 
 //Vienna Sightseeing Haltestellen
 //asynchrone Funktion, damit schneller geladen werden kann
-//STOPS
+// Vienna Sightseeing Haltestellen
 async function showStops(url) {
-    let response = await fetch(url); //Anfrage, Antwort kommt zurück
-    let jsondata = await response.json(); //json Daten aus Response entnehmen 
+    let response = await fetch(url);
+    let jsondata = await response.json();
+    //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        pointToLayer: function (feature, latlng) {
+        pointToLayer: function(feature, latlng) {
             //console.log(feature.properties)
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: `icon/bus_${feature.properties.LINE_ID}.png`,
+                    iconUrl: `icons/busstop${feature.properties.LINE_ID}.png`,
                     iconAnchor: [16, 37],
                     popupAnchor: [0, -37],
                 })
             });
         },
-        onEachFeature: function (feature, layer) {
-            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+        onEachFeature: function(feature, layer) {
+            let prop = feature.properties;
             layer.bindPopup(`
-            <h4><i class="fa-solid fa-bus"></i>  ${prop.LINE_NAME}</h4>
-            <p> ${prop.STAT_ID} ${prop.STAT_NAME} </p>
-            `);
+                <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
+                <p> ${prop.STAT_ID} ${prop.STAT_NAME}</p>
+        `);
         }
-    }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
-    //console.log(response);
+    }).addTo(themaLayer.stops);
 }
-showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json"); //aufrufen der Funktion 
+showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
-//LINES
+// Vienna Sightseeing Linien
 async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
-    let lineNames = {},
-        let lineColors = { //https://clrs.cc/
-            "1": "#FF4136", //Red Line
-            "2": "#FFDC00", //Yellow Line
-            "3": "#0074D9", //Blue Line
-            "4": "#2ECC40", //Green Line
-            "5": "#AAAAAA", //Grey Line 
-            "6": "#FF851B", //Orange Line
-        }
+    let lineNames = {};
+    let lineColors = {  // https://clrs.cc/
+        "1": "#FF4136",  // Red Line
+        "2": "#FFDC00",  // Yellow Line
+        "3": "#0074D9",  // Blue Line
+        "4": "#2ECC40",  // Green Line
+        "5": "#AAAAAA",  // Grey Line
+        "6": "#FF851B",  // Orange Line
+    }
 
-    //console.log(response,jsondata);
+    //console.log(response, jsondata);
     L.geoJSON(jsondata, {
         style: function (feature) {
             return {
@@ -97,25 +97,25 @@ async function showLines(url) {
                 dashArray: [10, 4]
             };
         },
-        onEachFeature: function (feature, layer) {
-            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+        onEachFeature: function(feature, layer) {
+            let prop = feature.properties;
             layer.bindPopup(`
             <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
             <p>
-            <start> <i class= "fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}</start> </br>
-            <i class= "fa-solid fa-down-long"></i> 
-            </br>
-            <end> <i class= "fa-regular fa-circle-stop"></i>${prop.TO_NAME}</end>
+            <i class="fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}<br>
+            <i class="fa-solid fa-down-long"></i>
+            <br>
+            <i class="fa-regular fa-circle-stop"></i> ${prop.TO_NAME}
             <br>
             </p>
-            `);
-            lineNames[prop.LINE_ID] = prop.LINE_NAME;
-            // console.log(lineNames)
+        `);
+        lineNames[prop.LINE_ID] = prop.LINE_NAME;
+        //console.log(lineNames)
         }
     }).addTo(themaLayer.lines);
-    //console.log(response);
 }
 showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
+
 
 //Sehenswürdigkeiten
 async function showSights(url) {
@@ -181,7 +181,7 @@ async function showHotels(url) {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: "icons/hotel_0star.png",
+                    iconUrl: "icons/hotel.png",
                     iconAnchor: [16, 37],
                     popupAnchor: [0, -37],
                 })
