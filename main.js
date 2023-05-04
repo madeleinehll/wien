@@ -20,7 +20,9 @@ let themaLayer = {
     lines: L.featureGroup().addTo(map),
     zones: L.featureGroup().addTo(map),
     sights: L.featureGroup().addTo(map),
-    hotels: L.markerClusterGroup()
+    hotels: L.markerClusterGroup({
+        disableClusteringAtZoom: 17
+    })
 }
 
 // Hintergrundlayer
@@ -222,9 +224,7 @@ async function showHotels(url){
             Addr.: ${prop.ADRESSE} <br>
             Tel.: <a href="mailto:${prop.KONTAKT_EMAIL}"> ${prop.KONTAKT_EMAIL}</a><br>
             
-            <a href="${prop.WEBLINK1}">Homepage</a><br>
-            
-            
+            <a href="${prop.WEBLINK1}">Homepage</a><br>  
         `);
             //console.log(feature.properties, prop.LINE_NAME);
 
