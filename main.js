@@ -53,7 +53,7 @@ async function showStops(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        pointToLayer: function(feature, latlng) {
+        pointToLayer: function (feature, latlng) {
             //console.log(feature.properties)
             return L.marker(latlng, {
                 icon: L.icon({
@@ -63,7 +63,7 @@ async function showStops(url) {
                 })
             });
         },
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
                 <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
@@ -97,7 +97,7 @@ async function showLines(url) {
                 dashArray: [10, 4]
             };
         },
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
             <h4><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
@@ -109,8 +109,8 @@ async function showLines(url) {
             <br>
             </p>
         `);
-        lineNames[prop.LINE_ID] = prop.LINE_NAME;
-        //console.log(lineNames)
+            lineNames[prop.LINE_ID] = prop.LINE_NAME;
+            //console.log(lineNames)
         }
     }).addTo(themaLayer.lines);
 }
@@ -172,33 +172,65 @@ async function showZones(url) {
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
 
-// Hotels
-async function showHotels(url) {
+//Hotels
+async function showHotels(url){
     let response = await fetch(url);
     let jsondata = await response.json();
-    //console.log(response, jsondata);
+    L.geoJSON(jsondata).addTo(themaLayer.hotels)
+    //console.log(response, jsondata)
     L.geoJSON(jsondata, {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: "icons/hotel.png",
-                    iconAnchor: [16, 37],
-                    popupAnchor: [0, -37],
-                })
-            });
-        },
-        onEachFeature: function (feature, layer) {
+            pointToLayer: function(feature, latlng) {
+                
+                if (feature.properties.KATEGORIE_TXT == "nicht kategorisiert") {
+                    icon = "icons/hotel_0.png"
+                }
+                else if (feature.properties.KATEGORIE_TXT == "1*") {
+                    icon = "icons/hotel_1.png"
+                }
+                else if (feature.properties.KATEGORIE_TXT == "2*") {
+                    icon = "icons/hotel_2.png"
+                }
+                else if (feature.properties.KATEGORIE_TXT == "3*") {
+                    icon = "icons/hotel_3.png"
+                }
+                else if (feature.properties.KATEGORIE_TXT == "4*") {
+                    icon = "icons/hotel_4.png"
+                }
+                else if (feature.properties.KATEGORIE_TXT == "5*") {
+                    icon = "icons/hotel_5.png"
+                }
+    
+
+                return L.marker(latlng, {
+                    icon: L.icon({
+                        iconUrl: 'icons/hotel.png',
+                        iconUrl: icon,
+                        iconAnchor: [16, 37],
+                        popupAnchor: [0, -37],
+                        
+                    })
+                });
+            },
+
+        onEachFeature: function(feature, layer){
             let prop = feature.properties;
             layer.bindPopup(`
-                <h3>${prop.BETRIEB}</h3>
-                <h4>${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}</h4>
-                <hr>
-                Addr.: ${prop.ADRESSE}<br>
-                Tel.: <a href="tel:${prop.KONTAKT_TEL}">${prop.KONTAKT_TEL}</a><br>
-                <a href="mailto:${prop.KONTAKT_EMAIL}">${prop.KONTAKT_EMAIL}</a><br>
-                <a href="${prop.WEBLINK1}">Homepage</a><br>
-            `);
+            
+            <h3>${prop.BETRIEB}</h3>
+            <h4>${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}  </h4>
+            <hr></hr>
+            Addr.: ${prop.ADRESSE} <br>
+            Tel.: <a href="mailto:${prop.KONTAKT_EMAIL}"> ${prop.KONTAKT_EMAIL}</a><br>
+            
+            <a href="${prop.WEBLINK1}">Homepage</a><br>
+            
+            
+        `);
+            //console.log(feature.properties, prop.LINE_NAME);
+
         }
     }).addTo(themaLayer.hotels);
+
 }
-showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
+showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json")
+
