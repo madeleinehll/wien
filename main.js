@@ -14,6 +14,12 @@ let map = L.map("map", {
     stephansdom.lat, stephansdom.lng
 ], 15);
 
+//MiniMap
+//var osm2 = L.tileLayer.provider("BasemapAT.overlay" {minZoom: 0, maxZoom: 13, attribution: osmAttrib}); //Hintergrundlayer definieren
+var osm2 = L.tileLayer.provider("BasemapAT.basemap");
+var miniMap = new L.Control.MiniMap(osm2).addTo(map);
+
+
 //Leaflet Hash
 new L.Hash(map);
 
