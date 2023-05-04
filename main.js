@@ -19,7 +19,8 @@ let map = L.map("map", {
 //var osm2 = L.tileLayer.provider("BasemapAT.basemap");
 var miniMap = new L.Control.MiniMap(
     L.tileLayer.provider("BasemapAT.basemap"),{
-        toggleDisplay:true
+        toggleDisplay:true,
+        minimized: true
     }
 ).addTo(map);
 
