@@ -32,7 +32,7 @@ L.control
     "BasemapAT Orthofoto": L.tileLayer.provider("BasemapAT.orthofoto"),
     "BasemapAT Beschriftung": L.tileLayer.provider("BasemapAT.overlay"),
     "BasemapAT Cycle": L.tileLayer.provider("CyclOSM"),
-  },{
+  }, {
     "Sehenswürdigkeiten": themaLayer.sights,
     "Vienna Liniennetz": themaLayer.lines,
     "Vienna Haltestellen": themaLayer.stops,
@@ -59,9 +59,9 @@ map.addControl(new L.Control.Fullscreen());
 //target = öffnen in neuem Tab
 async function loadSights(url) {
   console.log("Loading", url);
-  let response = await fetch (url);
+  let response = await fetch(url);
   let geojson = await response.json();
-  L.geoJSON(geojson,{
+  L.geoJSON(geojson, {
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.NAME}`);
@@ -78,9 +78,9 @@ loadSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&ver
 
 async function loadLines(url) {
   console.log("Loading", url);
-  let response = await fetch (url);
+  let response = await fetch(url);
   let geojson = await response.json();
-  L.geoJSON(geojson,{
+  L.geoJSON(geojson, {
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.LINE_NAME}`);
@@ -98,9 +98,9 @@ loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 
 async function loadStops(url) {
   console.log("Loading", url);
-  let response = await fetch (url);
+  let response = await fetch(url);
   let geojson = await response.json();
-  L.geoJSON(geojson,{
+  L.geoJSON(geojson, {
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.STAT_NAME}`);
@@ -117,9 +117,9 @@ loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 
 async function loadZones(url) {
   console.log("Loading", url);
-  let response = await fetch (url);
+  let response = await fetch(url);
   let geojson = await response.json();
-  L.geoJSON(geojson,{
+  L.geoJSON(geojson, {
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.ADRESSE}`);
@@ -135,14 +135,19 @@ loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 
 async function loadHotels(url) {
   console.log("Loading", url);
-  let response = await fetch (url);
+  let response = await fetch(url);
   let geojson = await response.json();
-  L.geoJSON(geojson,{
+  L.geoJSON(geojson, {
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.BETRIEB}`);
       layer.bindPopup(`
-      <adress>${feature.properties.ADRESSE} </adress>
+      <h4><strong>${feature.properties.BETRIEB}</strong></h4> 
+      <strong>Hotel ${feature.properties.KATEGORIE_TXT}</strong> <br>
+      _____________________________________
+      <adress>Addr.: ${feature.properties.ADRESSE} </adress>
+      Tel.: ${feature.properties.KONTAKT_TEL}<br>
+      ${feature.properties.KONTAKT_EMAIL}
       `);
     }
   }).addTo(themaLayer.hotels);
