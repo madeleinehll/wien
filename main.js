@@ -15,11 +15,11 @@ let startLayer = L.tileLayer.provider("BasemapAT.grau");
 startLayer.addTo(map);
 
 let themaLayer = {
-  sights: L.featureGroup().addTo(map),
+  sights: L.featureGroup(),
   lines: L.featureGroup().addTo(map),
-  stops: L.featureGroup().addTo(map),
-  zones: L.featureGroup().addTo(map),
-  hotels: L.featureGroup().addTo(map),
+  stops: L.featureGroup(),
+  zones: L.featureGroup(),
+  hotels: L.featureGroup(),
 }
 // Hintergrundlayer, über control automatisch positioniert
 L.control
@@ -85,12 +85,15 @@ async function loadLines(url) {
       console.log(feature);
       console.log(`${feature.properties.LINE_NAME}`);
       layer.bindPopup(`
-    
+      <i class="fa-solid fa-bus"> ${feature.properties.LINE_NAME}</i>
+      <h4><i class="fa-regular fa-circle-stop"></i> ${feature.properties.FROM_NAME}</h4>
+      <i class="fa-solid fa-arrow-down"></i>
+      <h4><i class="fa-regular fa-circle-stop"></i> ${feature.properties.TO_NAME}</h4>
       `);
     }
   }).addTo(themaLayer.lines);
 }
-loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=csv")
+loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json")
 
 
 async function loadStops(url) {
@@ -100,7 +103,7 @@ async function loadStops(url) {
   L.geoJSON(geojson,{
     onEachFeature: function (feature, layer) {
       console.log(feature);
-      console.log(`${feature.properties.STAT_NAME}`);
+      console.log(`<i class="fa-solid fa-bus"></i>${feature.properties.STAT_NAME}`);
       layer.bindPopup(`
     
       `);
