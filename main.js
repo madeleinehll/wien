@@ -14,7 +14,7 @@ let map = L.map("map").setView([stephansdom.lat, stephansdom.lng], 12);
 let startLayer = L.tileLayer.provider("BasemapAT.grau");
 startLayer.addTo(map);
 
-// Hintergrundlayer
+// Hintergrundlayer, über control automatisch positioniert
 L.control
   .layers({
     "BasemapAT Grau": startLayer,
@@ -24,6 +24,7 @@ L.control
     "BasemapAT Oberfläche": L.tileLayer.provider("BasemapAT.surface"),
     "BasemapAT Orthofoto": L.tileLayer.provider("BasemapAT.orthofoto"),
     "BasemapAT Beschriftung": L.tileLayer.provider("BasemapAT.overlay"),
+    "BasemapAT Cycle": L.tileLayer.provider("CyclOSM"),
   })
   .addTo(map);
 
