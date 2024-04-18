@@ -85,10 +85,10 @@ async function loadLines(url) {
       console.log(feature);
       console.log(`${feature.properties.LINE_NAME}`);
       layer.bindPopup(`
-      <i class="fa-solid fa-bus"> ${feature.properties.LINE_NAME}</i>
-      <h4><i class="fa-regular fa-circle-stop"></i> ${feature.properties.FROM_NAME}</h4>
-      <i class="fa-solid fa-arrow-down"></i>
-      <h4><i class="fa-regular fa-circle-stop"></i> ${feature.properties.TO_NAME}</h4>
+      <p><i class="fa-solid fa-bus"> ${feature.properties.LINE_NAME}</i></p>
+      <i class="fa-regular fa-circle-stop"></i> ${feature.properties.FROM_NAME}<br>
+      <i class="fa-solid fa-arrow-down"></i><br>
+      <i class="fa-regular fa-circle-stop"></i> ${feature.properties.TO_NAME}
       `);
     }
   }).addTo(themaLayer.lines);
@@ -103,9 +103,10 @@ async function loadStops(url) {
   L.geoJSON(geojson,{
     onEachFeature: function (feature, layer) {
       console.log(feature);
-      console.log(`<i class="fa-solid fa-bus"></i>${feature.properties.STAT_NAME}`);
+      console.log(`${feature.properties.STAT_NAME}`);
       layer.bindPopup(`
-    
+      <i class="fa-solid fa-bus"> ${feature.properties.LINE_NAME}</i>
+
       `);
     }
   }).addTo(themaLayer.stops);
