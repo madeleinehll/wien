@@ -40,3 +40,6 @@ L.control
     imperial: false,
   })
   .addTo(map);
+
+  //Fullscreen
+  map.addControl(new L.Control.Fullscreen());
