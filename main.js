@@ -14,6 +14,10 @@ let map = L.map("map").setView([stephansdom.lat, stephansdom.lng], 12);
 let startLayer = L.tileLayer.provider("BasemapAT.grau");
 startLayer.addTo(map);
 
+let themaLayer = {
+  sights: L.featureGroup().addTo(map),
+
+}
 // Hintergrundlayer, über control automatisch positioniert
 L.control
   .layers({
@@ -25,6 +29,8 @@ L.control
     "BasemapAT Orthofoto": L.tileLayer.provider("BasemapAT.orthofoto"),
     "BasemapAT Beschriftung": L.tileLayer.provider("BasemapAT.overlay"),
     "BasemapAT Cycle": L.tileLayer.provider("CyclOSM"),
+  },{
+    "Sehenswürdigkeiten": themaLayer.sights
   })
   .addTo(map);
 
@@ -47,12 +53,7 @@ map.addControl(new L.Control.Fullscreen());
 //L.control
 //.fullscreen ()
 //.addTo(map);
-// function addiere(zahl1,zahl2){
-//   let summe = zahl1 +zahl2;
-//   console.log("Summe: ", summe);
-// }
-//addiere(4,7);
-//async = function mit Daten die heruntergeladen werden müssen
+
 async function loadSights(url) {
   console.log("Loading", url);
   let response = await fetch (url);
