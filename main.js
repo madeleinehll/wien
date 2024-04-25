@@ -15,8 +15,8 @@ let startLayer = L.tileLayer.provider("BasemapAT.grau");
 startLayer.addTo(map);
 
 let themaLayer = {
-  sights: L.featureGroup(),
-  lines: L.featureGroup().addTo(map),
+  sights: L.featureGroup().addTo(map),
+  lines: L.featureGroup(),
   stops: L.featureGroup(),
   zones: L.featureGroup(),
   hotels: L.featureGroup(),
@@ -62,6 +62,14 @@ async function loadSights(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, {
+        icon: L.icon ({
+          iconUrl: "icons/photo.png"
+        })
+      });
+      
+    },
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.NAME}`);
