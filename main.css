@@ -5,6 +5,7 @@
 body {
     font-family: "Open Sans", sans-serif;
 }
+
 /* Links schwarz */
 a {
     color: black;
@@ -19,6 +20,7 @@ header {
     display: grid;
     grid-template-columns: 80% 20%;
 }
+
 /* Abstand zur Karte */
 header h2 {
     margin: 0;
@@ -34,6 +36,7 @@ header nav {
 article {
     margin-top: 0.5em;
 }
+
 /* Höhe Karte: view point height, anpassen an Browser*/
 #map {
     width: 100%;

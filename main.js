@@ -20,7 +20,7 @@ let themaLayer = {
   stops: L.featureGroup().addTo(map),
   zones: L.featureGroup().addTo(map),
   hotels: L.markerClusterGroup({
-    disableClusteringAtZoom:15
+    disableClusteringAtZoom: 15
   }).addTo(map),
 }
 // Hintergrundlayer, über control automatisch positioniert
