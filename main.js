@@ -17,9 +17,9 @@ startLayer.addTo(map);
 let themaLayer = {
   sights: L.featureGroup(),
   lines: L.featureGroup(),
-  stops: L.featureGroup().addTo(map),
+  stops: L.featureGroup(),
   zones: L.featureGroup(),
-  hotels: L.featureGroup(),
+  hotels: L.featureGroup().addTo(map),
 }
 // Hintergrundlayer, über control automatisch positioniert
 L.control
@@ -62,15 +62,15 @@ async function loadSights(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
-    pointToLayer: function(feature, latlng) {
+    pointToLayer: function (feature, latlng) {
       return L.marker(latlng, {
-        icon: L.icon ({
+        icon: L.icon({
           iconUrl: "icons/photo.png",
-          iconAnchor: [16,37],
-          popupAnchor: [0,-37],
+          iconAnchor: [16, 37],
+          popupAnchor: [0, -37],
         })
       });
-      
+
     },
     onEachFeature: function (feature, layer) {
       console.log(feature);
@@ -91,21 +91,21 @@ async function loadLines(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
-    style: function(feature){
+    style: function (feature) {
       console.log(feature.properties.LINE_NAME);
       let lineName = feature.properties.LINE_NAME;
       let lineColor = "black";
-      if (lineName == "Red Line"){
+      if (lineName == "Red Line") {
         lineColor = "#FF4136";
-      } else if (lineName== "Yellow Line"){
+      } else if (lineName == "Yellow Line") {
         lineColor = "#FFDC00";
-      } else if (lineName== "Blue Line"){
+      } else if (lineName == "Blue Line") {
         lineColor = "#0074D9";
-      } else if (lineName== "Green Line"){
+      } else if (lineName == "Green Line") {
         lineColor = "#2ECC40 ";
-      }else if (lineName== "Grey Line"){
+      } else if (lineName == "Grey Line") {
         lineColor = "#AAAAAA ";
-      }else if (lineName== "Orange Line"){
+      } else if (lineName == "Orange Line") {
         lineColor = "#FF851B ";
       } else {
         //vielleicht kommen noch andere Linien dazu
@@ -141,15 +141,16 @@ async function loadStops(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
-    pointToLayer: function(feature, latlng) {
+    pointToLayer: function (feature, latlng) {
       return L.marker(latlng, {
-        icon: L.icon ({
+        icon: L.icon({
           iconUrl: `icons/bus_${feature.properties.LINE_ID}.png`,
-          iconAnchor: [16,37],
-          popupAnchor: [0,-37],
+          iconAnchor: [16, 37],
+          popupAnchor: [0, -37],
         })
       },
-      )},
+      )
+    },
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.STAT_NAME}`);
@@ -169,9 +170,9 @@ async function loadZones(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
-    style:function(feature){
+    style: function (feature) {
       return {
-        color:"#F012BE",
+        color: "#F012BE",
         weight: 1,
         opacity: 0.4,
         fillOpacity: 0.1,
@@ -182,8 +183,8 @@ async function loadZones(url) {
       console.log(`${feature.properties.ADRESSE}`);
       layer.bindPopup(`
      <h4> Fußgängerzone ${feature.properties.ADRESSE} </h4>
-     <i class="fa-regular fa-clock"></i> ${feature.properties.ZEITRAUM||"dauerhaft"} <br>
-     <i class="fa-solid fa-circle-info"></i> ${feature.properties.AUSN_TEXT ||"ohne Ausnahme"}
+     <i class="fa-regular fa-clock"></i> ${feature.properties.ZEITRAUM || "dauerhaft"} <br>
+     <i class="fa-solid fa-circle-info"></i> ${feature.properties.AUSN_TEXT || "ohne Ausnahme"}
       `);
     }
   }).addTo(themaLayer.zones);
@@ -195,6 +196,32 @@ async function loadHotels(url) {
   let response = await fetch(url);
   let geojson = await response.json();
   L.geoJSON(geojson, {
+    pointToLayer: function (feature, latlng) {
+      let hotelKat = feature.properties.KATEGORIE_TXT;
+      if (hotelKat == "nicht kategorisiert") {
+        hotelName = "hotel_0star";
+      } else if (hotelKat == "1*") {
+        hotelName = "hotel_1star";
+      } else if (hotelKat == "2*") {
+        hotelName = "hotel_2stars";
+      } else if (hotelKat == "3*") {
+        hotelName = "hotel_3stars";
+      } else if (hotelKat == "4*") {
+        hotelName = "hotel_4stars";
+      } else if (hotelKat == "5*") {
+        hotelName = "hotel_5stars";
+      } else {
+        iconName = "hotel_0star"
+        //vllt mehr *
+      }
+      return L.marker(latlng, {
+        icon: L.icon({
+          iconUrl: `icons/${hotelName}.png`,
+          iconAnchor: [16, 37],
+          popupAnchor: [0, -37]
+        }),
+      });
+    },
     onEachFeature: function (feature, layer) {
       console.log(feature);
       console.log(`${feature.properties.BETRIEB}`);
