@@ -15,11 +15,11 @@ let startLayer = L.tileLayer.provider("BasemapAT.grau");
 startLayer.addTo(map);
 
 let themaLayer = {
-  sights: L.featureGroup().addTo(map),
-  lines: L.featureGroup().addTo(map),
-  stops: L.featureGroup().addTo(map),
+  sights: L.featureGroup(),
+  lines: L.featureGroup(),
+  stops: L.featureGroup(),
   zones: L.featureGroup().addTo(map),
-  hotels: L.featureGroup().addTo(map),
+  hotels: L.featureGroup(),
 }
 // Hintergrundlayer, über control automatisch positioniert
 L.control
