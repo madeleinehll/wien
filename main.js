@@ -97,6 +97,8 @@ async function loadLines(url) {
         lineColor = "#AAAAAA ";
       }else if (lineName== "Orange Line"){
         lineColor = "#FF851B ";
+      } else {
+        //vielleicht kommen noch andere Linien dazu
       };
       return {
         color: lineColor,
